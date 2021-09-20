@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 public class AppPage extends JFrame implements ActionListener {
 
     private JPanel mainPanel;
+    private JPanel BorderPanel;
+    private JPanel AppPanel;
 
     public AppPage(String title, User user, int WIDTH, int HEIGHT){
         super(title);

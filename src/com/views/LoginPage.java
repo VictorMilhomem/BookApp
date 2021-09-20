@@ -44,9 +44,9 @@ public class LoginPage extends JFrame implements ActionListener {
             user = new User();
             user = database.checkUser(userNameField.getText(), String.valueOf(passwordField.getPassword()));
             if(user != null){
-                System.out.println("Login "+ userNameField.getText());
                 database.closeConnection();
-                // TODO: after login in the user go's to the app home page
+                this.dispose();
+                new AppPage("AppHomePage", user, this.getWidth(), this.getHeight());
             }else{
                 JOptionPane.showMessageDialog(null, "Senha ou usuário incorretos");
             }
