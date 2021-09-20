@@ -29,6 +29,14 @@ public class DBConnection {
         }
     }
 
+    public void closeConnection(){
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void createNewUser(User user){
         try {
 
@@ -42,7 +50,6 @@ public class DBConnection {
             preparedStatement.executeUpdate();
             System.out.println("Created new user");
 
-            connection.close();
         } catch (SQLException e) {
             System.out.println("Error iserting a new user");
             e.printStackTrace();
@@ -66,9 +73,6 @@ public class DBConnection {
                 user.setEmail(result.getString("email"));
 
             }
-
-
-            connection.close();
 
         }catch (SQLException e){
             e.printStackTrace();

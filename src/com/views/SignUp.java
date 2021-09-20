@@ -29,12 +29,12 @@ public class SignUp extends JFrame implements ActionListener {
     protected User user;
     private int id = 1;
 
-    public SignUp(String title){
+    public SignUp(String title, int WIDTH, int HEIGHT){
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
-        this.setSize(800, 600);
+        this.setSize(WIDTH, HEIGHT);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setResizable(false);
@@ -58,7 +58,8 @@ public class SignUp extends JFrame implements ActionListener {
 
             if (password.equals(String.valueOf(passwordField.getPassword()))){
                 user = new User(userId, userFirstName, userLastName, username, email, password);
-                dataBase.createNewUser(new User(userId, userFirstName, userLastName, username, email, password));
+                dataBase.createNewUser(user);
+                dataBase.closeConnection();
                 // TODO: after signing up the user go's to the app home page
                 id++;
             }else {
