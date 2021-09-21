@@ -91,6 +91,7 @@
                 </constraints>
                 <properties>
                   <background color="-16764343"/>
+                  <focusable value="false"/>
                   <font name="Segoe UI" size="14" style="0"/>
                   <foreground color="-3351588"/>
                   <text value="login"/>
@@ -133,6 +134,7 @@
                   <background color="-3351588"/>
                   <borderPainted value="false"/>
                   <focusPainted value="true"/>
+                  <focusable value="false"/>
                   <font name="Segoe UI" size="14" style="0"/>
                   <foreground color="-16764343"/>
                   <text value="cadastrar"/>

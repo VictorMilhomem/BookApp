@@ -25,11 +25,11 @@ public class SignUp extends JFrame implements ActionListener {
     private JButton signUpButton;
     private JPasswordField passwordField;
     private JPasswordField confirmPasswordField;
+    private JLabel setTextFielValuesLabel;
     private final DBConnection dataBase;
     protected User user;
-    private int id = 1;
 
-    public SignUp(String title, int WIDTH, int HEIGHT){
+    public SignUp(String title, int WIDTH, int HEIGHT) {
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
@@ -47,25 +47,29 @@ public class SignUp extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (signUpButton.equals(e.getSource())){
+        if (signUpButton.equals(e.getSource())) {
 
-            int userId = id;
             String userFirstName = firstNameField.getText();
             String userLastName = lastNameField.getText();
             String username = useNameField.getText();
             String email = emailField.getText();
             String password = String.valueOf(confirmPasswordField.getPassword());
 
-            if (password.equals(String.valueOf(passwordField.getPassword()))){
-                user = new User(userId, userFirstName, userLastName, username, email, password);
-                dataBase.createNewUser(user);
+            if (userFirstName.equals("") || userLastName.equals("") || username.equals("") || email.equals("") || String.valueOf(passwordField.getPassword()).equals("")) {
+                setTextFielValuesLabel.setVisible(true);
+
+            } else if (password.equals(String.valueOf(passwordField.getPassword())) && !password.equals("")) {
+
+                user = dataBase.createNewUser(userFirstName, userLastName, username, email, password);
                 dataBase.closeConnection();
-                // TODO: after signing up the user go's to the app home page
-                id++;
-            }else {
+                this.dispose();
+                new AppPage("AppHomePage", user, this.getWidth(), this.getHeight());
+
+            } else {
                 JOptionPane.showMessageDialog(null, "As senhas não combinam");
             }
-
         }
+
     }
 }
+

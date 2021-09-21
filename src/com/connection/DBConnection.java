@@ -16,6 +16,8 @@ public class DBConnection {
     private static final String SELECT_USER_SQL = "SELECT * FROM public.users" +
             " WHERE username = ?" +
             " and password = crypt(?, password);";
+    private static final String DELETE_USER_SQL = "DELETE FROM public.users" +
+            " WHERE id= ?;";
 
     public DBConnection(String title){
         this.title = title;
@@ -37,7 +39,9 @@ public class DBConnection {
         }
     }
 
-    public void createNewUser(User user){
+    public User createNewUser(String firstName, String lastName, String username, String email, String password){
+        User user = new User(firstName, lastName, username, email, password);
+
         try {
 
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL);
@@ -48,12 +52,11 @@ public class DBConnection {
             preparedStatement.setString(5, user.getPassword());
 
             preparedStatement.executeUpdate();
-            System.out.println("Created new user");
 
         } catch (SQLException e) {
-            System.out.println("Error iserting a new user");
             e.printStackTrace();
         }
+        return user;
     }
 
     public User checkUser(String userEmail, String userPassword){
@@ -76,10 +79,60 @@ public class DBConnection {
 
         }catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Error selecting a user");
         }
 
         return user;
+    }
+
+    public void updateDBUser(User user){
+        final String updateFirstName = "UPDATE public.users" +
+                " SET first_name = ?" + " WHERE id=?;";
+        final String updateLastName = "UPDATE public.users" + " SET last_name = ?" + " WHERE id=?;";
+        final String updateUserName = "UPDATE public.users" + " SET username = ?" + " WHERE id=?;";
+        final String updateEmail = "UPDATE public.users" + " SET email = ?" + " WHERE id=?;";
+        final String updatePassword = "UPDATE public.users" + " SET password = crypt(?, gen_salt('bf'))"
+                + " WHERE id=?;";
+
+        try {
+
+            PreparedStatement firstNameStatement = connection.prepareStatement(updateFirstName);
+            PreparedStatement lastNameStatement = connection.prepareStatement(updateLastName);
+            PreparedStatement userNameStatement = connection.prepareStatement(updateUserName);
+            PreparedStatement passwordStatement = connection.prepareStatement(updatePassword);
+            PreparedStatement emailStatement = connection.prepareStatement(updateEmail);
+
+            firstNameStatement.setString(1, user.getFirstName());
+            firstNameStatement.setInt(2, user.getId());
+            lastNameStatement.setString(1, user.getLastName());
+            lastNameStatement.setInt(2, user.getId());
+            userNameStatement.setString(1, user.getUserName());
+            userNameStatement.setInt(2, user.getId());
+            passwordStatement.setString(1, user.getPassword());
+            passwordStatement.setInt(2, user.getId());
+            emailStatement.setString(1, user.getEmail());
+            emailStatement.setInt(2, user.getId());
+
+
+
+            firstNameStatement.executeUpdate();
+            lastNameStatement.executeUpdate();
+            userNameStatement.executeUpdate();
+            passwordStatement.executeUpdate();
+            emailStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteUser(User user){
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER_SQL);
+            preparedStatement.setInt(1, user.getId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }
