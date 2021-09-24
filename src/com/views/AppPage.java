@@ -1,6 +1,7 @@
 package com.views;
 
 import com.connection.DBConnection;
+import com.connection.DBUser;
 import com.models.User;
 
 import javax.swing.*;
@@ -30,7 +31,13 @@ public class AppPage extends JFrame implements ActionListener {
     private JPasswordField confirmPasswordField;
     private JPasswordField passwordField;
     private JButton exitButton;
-    private final DBConnection database;
+    private JLabel bookNameLabel;
+    private JButton nextBookButton;
+    private JButton addBookButton;
+    private JTextField bookAuthorField;
+    private JTextField bookReviewField;
+    private JTextArea bookSnippetArea;
+    private final DBUser database;
 
     public AppPage(String title, User user, int WIDTH, int HEIGHT){
         super(title);
@@ -43,7 +50,7 @@ public class AppPage extends JFrame implements ActionListener {
         this.setResizable(false);
         this.userInApp = user;
 
-        database = new DBConnection("AppConnection");
+        database = new DBUser("AppConnection");
 
         //---- Buttons --------------------------//
         myAccountButton.addActionListener(this);
@@ -126,6 +133,7 @@ public class AppPage extends JFrame implements ActionListener {
         if (deleteAccountButton.equals(e.getSource())){
             database.deleteUser(this.userInApp);
             database.closeConnection();
+            JOptionPane.showMessageDialog(null, "Conta excluída com sucesso");
             this.dispose();
             JFrame frame = new LoginPage("Login");
             frame.setSize(this.getWidth(), this.getHeight());

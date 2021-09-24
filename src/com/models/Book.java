@@ -1,28 +1,28 @@
 package com.models;
 
 public class Book {
-    private int id;
     private String bookName;
-    private String bookPicture;
+    private String bookSnippet;
     private String bookAuthor;
-    private String bookFile;
     private double bookReview;
 
-    public Book (int id, String bookName, String bookPicture, String bookAuthor, String bookFile, double bookReview){
-        this.id = id;
+    public Book(){
+
+    }
+
+    public Book (String bookName, String bookSnippet, String bookAuthor, double bookReview){
         this.bookName = bookName;
-        this.bookPicture = bookPicture;
+        this.bookSnippet = bookSnippet;
         this.bookAuthor = bookAuthor;
-        this.bookFile = bookFile;
         this.bookReview = bookReview;
     }
 
-    public int getId() {
-        return id;
+    public String getBookSnippet() {
+        return bookSnippet;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBookSnippet(String bookSnippet) {
+        this.bookSnippet = bookSnippet;
     }
 
     public String getBookName() {
@@ -33,13 +33,6 @@ public class Book {
         this.bookName = bookName;
     }
 
-    public String getBookPicture() {
-        return bookPicture;
-    }
-
-    public void setBookPicture(String bookPicture) {
-        this.bookPicture = bookPicture;
-    }
 
     public String getBookAuthor() {
         return bookAuthor;
@@ -47,14 +40,6 @@ public class Book {
 
     public void setBookAuthor(String bookAuthor) {
         this.bookAuthor = bookAuthor;
-    }
-
-    public String getBookFile() {
-        return bookFile;
-    }
-
-    public void setBookFile(String bookFile) {
-        this.bookFile = bookFile;
     }
 
     public double getBookReview() {

@@ -1,6 +1,7 @@
 package com.views;
 
 import com.connection.DBConnection;
+import com.connection.DBUser;
 import com.models.User;
 
 import javax.swing.*;
@@ -26,7 +27,7 @@ public class SignUp extends JFrame implements ActionListener {
     private JPasswordField passwordField;
     private JPasswordField confirmPasswordField;
     private JLabel setTextFielValuesLabel;
-    private final DBConnection dataBase;
+    private final DBUser dataBase;
     protected User user;
 
     public SignUp(String title, int WIDTH, int HEIGHT) {
@@ -38,7 +39,7 @@ public class SignUp extends JFrame implements ActionListener {
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         this.setResizable(false);
-        dataBase = new DBConnection("SignUp");
+        dataBase = new DBUser("SignUp");
 
         //----- Buttons-----//
         signUpButton.addActionListener(this);
@@ -49,10 +50,10 @@ public class SignUp extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (signUpButton.equals(e.getSource())) {
 
-            String userFirstName = firstNameField.getText();
-            String userLastName = lastNameField.getText();
+            String userFirstName = firstNameField.getText().toLowerCase();
+            String userLastName = lastNameField.getText().toLowerCase();
             String username = useNameField.getText();
-            String email = emailField.getText();
+            String email = emailField.getText().toLowerCase();
             String password = String.valueOf(confirmPasswordField.getPassword());
 
             if (userFirstName.equals("") || userLastName.equals("") || username.equals("") || email.equals("") || String.valueOf(passwordField.getPassword()).equals("")) {

@@ -1,6 +1,7 @@
 package com.views;
 
 import com.connection.DBConnection;
+import com.connection.DBUser;
 import com.models.User;
 
 import javax.swing.*;
@@ -19,7 +20,7 @@ public class LoginPage extends JFrame implements ActionListener {
     private JLabel passwordLabel;
     private JButton loginButton;
     private JButton signUpButton;
-    private final DBConnection database;
+    private final DBUser database;
     protected User user;
 
     public LoginPage(String title){
@@ -27,7 +28,7 @@ public class LoginPage extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(mainPanel);
         this.pack();
-        database = new DBConnection("LoginConnection");
+        database = new DBUser("LoginConnection");
 
         //---- Buttons ---------------------------//
 
