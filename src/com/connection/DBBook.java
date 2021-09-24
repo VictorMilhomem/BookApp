@@ -3,6 +3,7 @@ package com.connection;
 import com.models.Book;
 import com.models.User;
 
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,67 +15,109 @@ public class DBBook extends DBConnection{
         super(title);
     }
 
-    public Book createBook(User user, String bookName, String bookSnippet, String bookAuthor, double bookReview){
-        final String INSERT_BOOKS_SQL = "INSERT INTO public.books" +
-                " (id, bookname, author, username, snippet, review) VALUES " +
-                " (default, ?, ?, ?, ?, ? );";
-        Book book = new Book(bookName, bookSnippet, bookAuthor, bookReview);
+    public ArrayList<Book> createBook(ArrayList<Book> books,String bookName, String bookSnippet, String bookAuthor, double bookReview, User user){
+        final String INSERT_BOOK_SQL = "INSERT INTO public.books VALUES (default, ?, ?, ?, ?, ?);";
+        final String CHECK_USER = "SELECT * FROM public.books WHERE username=?;";
+        final String DELETE_BOOK_LIST = "DELETE FROM public.books WHERE username=?;";
+        String[] booknames = {""};
+        String[] bookauthors = {""};
+        String[] snippets = {""};
+        Double[] reviews = {0.0};
+        String username = user.getUserName();
+
+        Book temp = new Book(bookName, bookSnippet, bookAuthor, bookReview);
+        books.add(temp);
+
+        int i = 0;
+        for (Book b: books){
+            booknames[i] = b.getBookName();
+            bookauthors[i] = b.getBookAuthor();
+            snippets[i] = b.getBookSnippet();
+            reviews[i] = b.getBookReview();
+            i++;
+        }
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_BOOKS_SQL);
-            preparedStatement.setString(1, bookName);
-            preparedStatement.setString(2, bookAuthor);
-            preparedStatement.setString(3, user.getUserName());
-            preparedStatement.setString(4, bookSnippet);
-            preparedStatement.setDouble(5, bookReview);
+            Array arrayBookName = connection.createArrayOf("text", booknames);
+            Array arrayBookAuthors = connection.createArrayOf("text", bookauthors);
+            Array arrayBookSnippets = connection.createArrayOf("text", snippets);
+            Array arrayReviews = connection.createArrayOf("double precision", reviews);
+
+            PreparedStatement checkUser = connection.prepareStatement(CHECK_USER);
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_BOOK_SQL);
+
+            checkUser.setString(1, username);
+            ResultSet rs = checkUser.executeQuery();
+            if(rs.next()){
+                PreparedStatement deleteCurrentBookList = connection.prepareStatement(DELETE_BOOK_LIST);
+                deleteCurrentBookList.setString(1, username);
+                deleteCurrentBookList.executeUpdate();
+            }
+
+            preparedStatement.setArray(1, arrayBookName);
+            preparedStatement.setArray(2,arrayBookAuthors);
+            preparedStatement.setString(3, username);
+            preparedStatement.setArray(4, arrayBookSnippets);
+            preparedStatement.setArray(5, arrayReviews);
 
             preparedStatement.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return book;
+
+        return books;
     }
 
-    public void updateBook(Book book, User user){
-        final String UPDATE_BOOKNAME = "UPDATE public.books" + " SET bookname=? " + " WHERE username=?;";
-        final String UPDATE_AUTHOR = "UPDATE public.books" + " SET author=? " + " WHERE username=?;";
-        final String UPDATE_SNIPPET = "UPDATE public.books" + " SET snippet=? " + " WHERE username=?;";
-        final String UPDATE_REVIEW = "UPDATE public.books" + " SET review=? " + " WHERE username=?;";
+    public ArrayList<Book> updateBooks(ArrayList<Book> books, User user){
+        final String UPDATE_BOOKNAME = "UPDATE public.books SET bookname=? WHERE username=?";
+        final String UPDATE_BOOKAUTHOR = "UPDATE public.books SET author=? WHERE username=?";
+        final String UPDATE_SNIPPET = "UPDATE public.books SET snippet=? WHERE username=?";
+        final String UPDATE_REVIEW = "UPDATE public.books SET review=? WHERE username=?";
+        String[] booknames = {""};
+        String[] bookauthors = {""};
+        String[] snippets = {""};
+        Double[] reviews = {0.0};
+        String username = user.getUserName();
+
+        int i = 0;
+        for (Book b: books){
+            booknames[i] = b.getBookName();
+            bookauthors[i] = b.getBookAuthor();
+            snippets[i] = b.getBookSnippet();
+            reviews[i] = b.getBookReview();
+            i++;
+        }
+
         try {
-            PreparedStatement bookNameUpdate = connection.prepareStatement(UPDATE_BOOKNAME);
-            PreparedStatement authorUpdate = connection.prepareStatement(UPDATE_AUTHOR);
-            PreparedStatement snippetUpdate = connection.prepareStatement(UPDATE_SNIPPET);
-            PreparedStatement reviewUpdate = connection.prepareStatement(UPDATE_REVIEW);
+            Array arrayBookName = connection.createArrayOf("text", booknames);
+            Array arrayBookAuthors = connection.createArrayOf("text", bookauthors);
+            Array arrayBookSnippets = connection.createArrayOf("text", snippets);
+            Array arrayReviews = connection.createArrayOf("double precision", reviews);
 
-            bookNameUpdate.setString(1, book.getBookName());
-            bookNameUpdate.setString(2, user.getUserName());
-            authorUpdate.setString(1, book.getBookAuthor());
-            authorUpdate.setString(2, user.getUserName());
-            snippetUpdate.setString(1, book.getBookSnippet());
-            snippetUpdate.setString(2, user.getUserName());
-            reviewUpdate.setDouble(1, book.getBookReview());
-            reviewUpdate.setString(2, user.getUserName());
+            PreparedStatement updateBookName = connection.prepareStatement(UPDATE_BOOKNAME);
+            PreparedStatement updateBookAuthors = connection.prepareStatement(UPDATE_BOOKAUTHOR);
+            PreparedStatement updateSnippets = connection.prepareStatement(UPDATE_SNIPPET);
+            PreparedStatement updateReview = connection.prepareStatement(UPDATE_REVIEW);
 
-            bookNameUpdate.executeUpdate();
-            authorUpdate.executeUpdate();
-            snippetUpdate.executeUpdate();
-            reviewUpdate.executeUpdate();
+            updateBookName.setArray(1, arrayBookName);
+            updateBookName.setString(2, username);
+            updateBookAuthors.setArray(1, arrayBookAuthors);
+            updateBookAuthors.setString(2, username);
+            updateSnippets.setArray(1, arrayBookSnippets);
+            updateSnippets.setString(2, username);
+            updateReview.setArray(1, arrayReviews);
+            updateReview.setString(2, username);
+
+            updateBookName.executeUpdate();
+            updateBookAuthors.executeUpdate();
+            updateSnippets.executeUpdate();
+            updateReview.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
 
-    public void deleteBook(Book book, User user){
-        final String DELETE_BOOK_SQL = "DELETE FROM public.books" +
-                " WHERE username= ? AND bookname= ?;";
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(DELETE_BOOK_SQL);
-            preparedStatement.setString(1, user.getUserName());
-            preparedStatement.setString(2, book.getBookName());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        return books;
     }
 }
