@@ -15,14 +15,14 @@ public class DBBook extends DBConnection{
         super(title);
     }
 
-    public ArrayList<Book> createBook(ArrayList<Book> books,String bookName, String bookSnippet, String bookAuthor, double bookReview, User user){
+    public ArrayList<Book> createBook(ArrayList<Book> books,String bookName, String bookSnippet, String bookAuthor, int bookReview, User user){
         final String INSERT_BOOK_SQL = "INSERT INTO public.books VALUES (default, ?, ?, ?, ?, ?);";
         final String CHECK_USER = "SELECT * FROM public.books WHERE username=?;";
         final String DELETE_BOOK_LIST = "DELETE FROM public.books WHERE username=?;";
         String[] booknames = {""};
         String[] bookauthors = {""};
         String[] snippets = {""};
-        Double[] reviews = {0.0};
+        Integer[] reviews = {0};
         String username = user.getUserName();
 
         Book temp = new Book(bookName, bookSnippet, bookAuthor, bookReview);
@@ -33,7 +33,7 @@ public class DBBook extends DBConnection{
             booknames[i] = b.getBookName();
             bookauthors[i] = b.getBookAuthor();
             snippets[i] = b.getBookSnippet();
-            reviews[i] = b.getBookReview();
+            reviews[i] = (int)b.getBookReview();
             i++;
         }
 
@@ -41,7 +41,7 @@ public class DBBook extends DBConnection{
             Array arrayBookName = connection.createArrayOf("text", booknames);
             Array arrayBookAuthors = connection.createArrayOf("text", bookauthors);
             Array arrayBookSnippets = connection.createArrayOf("text", snippets);
-            Array arrayReviews = connection.createArrayOf("double precision", reviews);
+            Array arrayReviews = connection.createArrayOf("integer", reviews);
 
             PreparedStatement checkUser = connection.prepareStatement(CHECK_USER);
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_BOOK_SQL);
@@ -77,7 +77,7 @@ public class DBBook extends DBConnection{
         String[] booknames = {""};
         String[] bookauthors = {""};
         String[] snippets = {""};
-        Double[] reviews = {0.0};
+        Integer[] reviews = {0};
         String username = user.getUserName();
 
         int i = 0;
@@ -85,7 +85,7 @@ public class DBBook extends DBConnection{
             booknames[i] = b.getBookName();
             bookauthors[i] = b.getBookAuthor();
             snippets[i] = b.getBookSnippet();
-            reviews[i] = b.getBookReview();
+            reviews[i] = (int)b.getBookReview();
             i++;
         }
 
@@ -93,7 +93,7 @@ public class DBBook extends DBConnection{
             Array arrayBookName = connection.createArrayOf("text", booknames);
             Array arrayBookAuthors = connection.createArrayOf("text", bookauthors);
             Array arrayBookSnippets = connection.createArrayOf("text", snippets);
-            Array arrayReviews = connection.createArrayOf("double precision", reviews);
+            Array arrayReviews = connection.createArrayOf("integer", reviews);
 
             PreparedStatement updateBookName = connection.prepareStatement(UPDATE_BOOKNAME);
             PreparedStatement updateBookAuthors = connection.prepareStatement(UPDATE_BOOKAUTHOR);

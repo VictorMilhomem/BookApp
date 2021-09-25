@@ -33,7 +33,7 @@
             </properties>
             <border type="none"/>
             <children>
-              <grid id="d743f" binding="bookPanel" layout-manager="GridLayoutManager" row-count="11" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="d743f" binding="bookPanel" layout-manager="GridLayoutManager" row-count="15" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <card name="Card1"/>
@@ -56,7 +56,7 @@
                   </component>
                   <vspacer id="e1202">
                     <constraints>
-                      <grid row="10" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                      <grid row="14" column="0" row-span="1" col-span="3" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                     </constraints>
                   </vspacer>
                   <component id="e8098" class="javax.swing.JLabel">
@@ -93,7 +93,7 @@
                   </vspacer>
                   <vspacer id="79799">
                     <constraints>
-                      <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                      <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
                         <preferred-size width="-1" height="5"/>
                       </grid>
                     </constraints>
@@ -122,7 +122,7 @@
                       </grid>
                     </constraints>
                     <properties>
-                      <background color="-3351588"/>
+                      <background color="-1"/>
                       <editable value="false"/>
                       <font name="Segoe UI" size="14" style="0"/>
                       <foreground color="-16764343"/>
@@ -135,7 +135,7 @@
                       </grid>
                     </constraints>
                     <properties>
-                      <background color="-3351588"/>
+                      <background color="-1"/>
                       <editable value="false"/>
                       <font name="Segoe UI" size="14" style="0"/>
                       <foreground color="-16764343"/>
@@ -148,7 +148,7 @@
                       </grid>
                     </constraints>
                     <properties>
-                      <background color="-3351588"/>
+                      <background color="-1"/>
                       <editable value="false"/>
                       <font name="Segoe UI" size="14" style="0"/>
                       <foreground color="-16764343"/>
@@ -169,7 +169,7 @@
                   </component>
                   <component id="51f41" class="javax.swing.JButton" binding="addBookButton">
                     <constraints>
-                      <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="13" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <background color="-16764343"/>
@@ -188,6 +188,73 @@
                       </grid>
                     </constraints>
                   </hspacer>
+                  <component id="7329" class="javax.swing.JButton" binding="confirmAddBookButton">
+                    <constraints>
+                      <grid row="9" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-16764343"/>
+                      <enabled value="true"/>
+                      <focusable value="false"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-3351588"/>
+                      <text value="adicionar"/>
+                      <visible value="false"/>
+                    </properties>
+                  </component>
+                  <component id="6759f" class="javax.swing.JButton" binding="cancelAddBookButton">
+                    <constraints>
+                      <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <background color="-65536"/>
+                      <enabled value="true"/>
+                      <focusable value="false"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-3351588"/>
+                      <text value="cancelar"/>
+                      <visible value="false"/>
+                    </properties>
+                  </component>
+                  <vspacer id="205d4">
+                    <constraints>
+                      <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <vspacer id="7abe9">
+                    <constraints>
+                      <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false">
+                        <preferred-size width="-1" height="5"/>
+                      </grid>
+                    </constraints>
+                  </vspacer>
+                  <component id="405a8" class="javax.swing.JLabel" binding="bookNameEditLabel">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="1" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-16764343"/>
+                      <text value="nome do livro:"/>
+                      <visible value="false"/>
+                    </properties>
+                  </component>
+                  <component id="f5913" class="javax.swing.JTextField" binding="bookNameField">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                        <preferred-size width="150" height="-1"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-1"/>
+                      <editable value="false"/>
+                      <font name="Segoe UI" size="14" style="0"/>
+                      <foreground color="-16764343"/>
+                      <visible value="false"/>
+                    </properties>
+                  </component>
                 </children>
               </grid>
               <grid id="ba4a2" binding="myAccountPanel" layout-manager="GridLayoutManager" row-count="21" column-count="7" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">

@@ -10,7 +10,7 @@ public class Book {
 
     }
 
-    public Book (String bookName, String bookSnippet, String bookAuthor, double bookReview){
+    public Book (String bookName, String bookSnippet, String bookAuthor, int bookReview){
         this.bookName = bookName;
         this.bookSnippet = bookSnippet;
         this.bookAuthor = bookAuthor;
