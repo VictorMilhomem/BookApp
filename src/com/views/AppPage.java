@@ -210,10 +210,15 @@ public class AppPage extends JFrame implements ActionListener {
 
         // Book Panel
         if (addBookButton.equals(e.getSource())){
+            bookNameField.setText("");
+            bookAuthorField.setText("");
+            bookReviewField.setText("");
+            bookSnippetArea.setText("");
             editBookVisible(true, true);
         }
 
         if (cancelAddBookButton.equals(e.getSource())){
+            setBookPanel(books, next);
             editBookVisible(false, false);
         }
 
