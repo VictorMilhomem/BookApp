@@ -43,9 +43,12 @@ public class AppPage extends JFrame implements ActionListener {
     private JButton confirmAddBookButton;
     private JTextField bookNameField;
     private JLabel bookNameEditLabel;
+    private JButton editBookButton;
     private final DBUser database;
     private final DBBook bookDatabase;
     private ArrayList<Book> books;
+    private int next;
+    int editing;
 
     public AppPage(String title, User user, int WIDTH, int HEIGHT){
         super(title);
@@ -60,9 +63,16 @@ public class AppPage extends JFrame implements ActionListener {
 
         database = new DBUser("AppConnection");
         bookDatabase = new DBBook("Books");
+        editing = 0;
 
-        // TODO: when initializing the app verify if the user already have a list of books and display it
-        books = new ArrayList<>();
+        // displaying the books
+        if(bookDatabase.checkUserBooks(this.userInApp)) {
+            books = bookDatabase.getBooks(this.userInApp);
+            next = 0;
+            setBookPanel(books, next);
+        } else{
+            books = new ArrayList<>();
+        }
 
 
         //---- Buttons --------------------------//
@@ -77,6 +87,7 @@ public class AppPage extends JFrame implements ActionListener {
         confirmAddBookButton.addActionListener(this);
         cancelAddBookButton.addActionListener(this);
         nextBookButton.addActionListener(this);
+        editBookButton.addActionListener(this);
         //---- End Buttons ----------------------//
 
         //---- Account -------------------------//
@@ -86,7 +97,13 @@ public class AppPage extends JFrame implements ActionListener {
         emailTextField.setText(this.userInApp.getEmail());
         //---- End Account ---------------------//
 
+        // Book Snippet Area Wrap --------------//
+        bookSnippetArea.setLineWrap(true);
+        bookSnippetArea.setWrapStyleWord(true);
+
     }
+
+
 
     public void setBookPanel(ArrayList<Book> books, int i){
         Book book = books.get(i);
@@ -140,6 +157,7 @@ public class AppPage extends JFrame implements ActionListener {
         cancelAddBookButton.setVisible(visible);
         confirmAddBookButton.setVisible(visible);
         addBookButton.setVisible(!visible);
+        editBookButton.setVisible(!visible);
         nextBookButton.setVisible(!visible);
     }
 
@@ -203,17 +221,48 @@ public class AppPage extends JFrame implements ActionListener {
 
             String bookName = bookNameField.getText();
             String authors =  bookAuthorField.getText();
-            int review = Integer.parseInt(bookReviewField.getText());
+            int review = (int)Double.parseDouble(bookReviewField.getText());
             String snippet = bookSnippetArea.getText();
+            switch (editing){
+                case 0:
+                    confirmAddBookButton.setText("adicionar");
+                    if (bookName.equals("") || authors.equals("") || snippet.equals("") || bookReviewField.getText().equals("")){
+                        JOptionPane.showMessageDialog(null, "Preencha todos os campos");
+                    }
+                    else {
+                        books.add(new Book(bookName, snippet, authors, review));
+                        books = bookDatabase.createBook(books, userInApp);
+                        editBookVisible(false, false);
+                    }
+                    break;
+                case 1:
+                    confirmAddBookButton.setText("confirmar");
+                    if (bookName.equals("") || authors.equals("") || snippet.equals("") || bookReviewField.getText().equals("")){
+                        JOptionPane.showMessageDialog(null, "Preencha todos os campos");
+                    }
+                    else {
+                        books.add(new Book(bookName, snippet, authors, review));
+                        books = bookDatabase.updateBooks(books, userInApp);
+                        editBookVisible(false, false);
+                    }
+                    break;
+                default:break;
+            }
 
-            if (bookName.equals("") || authors.equals("") || snippet.equals("") || bookReviewField.getText().equals("")){
-                JOptionPane.showMessageDialog(null, "Preencha todos os campos");
+        }
+
+        if (nextBookButton.equals(e.getSource())){
+            ++next;
+            if (next >= books.size()){
+                next = 0;
             }
-            else {
-                books = bookDatabase.createBook(books, bookName, snippet, authors, review, userInApp);
-                editBookVisible(false, false);
-                setBookPanel(books, 0);
-            }
+            setBookPanel(books, next);
+        }
+
+        if (editBookButton.equals(e.getSource())){
+            editing = 1;
+            bookNameField.setText(bookNameLabel.getText());
+            editBookVisible(true, true);
         }
 
     }

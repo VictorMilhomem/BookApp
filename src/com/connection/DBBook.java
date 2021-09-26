@@ -15,26 +15,23 @@ public class DBBook extends DBConnection{
         super(title);
     }
 
-    public ArrayList<Book> createBook(ArrayList<Book> books,String bookName, String bookSnippet, String bookAuthor, int bookReview, User user){
+    public ArrayList<Book> createBook(ArrayList<Book> books, User user){
         final String INSERT_BOOK_SQL = "INSERT INTO public.books VALUES (default, ?, ?, ?, ?, ?);";
         final String CHECK_USER = "SELECT * FROM public.books WHERE username=?;";
         final String DELETE_BOOK_LIST = "DELETE FROM public.books WHERE username=?;";
-        String[] booknames = {""};
-        String[] bookauthors = {""};
-        String[] snippets = {""};
-        Integer[] reviews = {0};
+        int size = books.size();
+        String[] booknames = new String[size];
+        String[] bookauthors = new String[size];
+        String[] snippets = new String[size];
+        Integer[] reviews = new Integer[size];
         String username = user.getUserName();
 
-        Book temp = new Book(bookName, bookSnippet, bookAuthor, bookReview);
-        books.add(temp);
 
-        int i = 0;
-        for (Book b: books){
-            booknames[i] = b.getBookName();
-            bookauthors[i] = b.getBookAuthor();
-            snippets[i] = b.getBookSnippet();
-            reviews[i] = (int)b.getBookReview();
-            i++;
+        for (int i = 0; i < books.size(); i++){
+            booknames[i] = books.get(i).getBookName();
+            bookauthors[i] = books.get(i).getBookAuthor();
+            snippets[i] = books.get(i).getBookSnippet();
+            reviews[i] = (int)books.get(i).getBookReview();
         }
 
         try {
@@ -74,19 +71,19 @@ public class DBBook extends DBConnection{
         final String UPDATE_BOOKAUTHOR = "UPDATE public.books SET author=? WHERE username=?";
         final String UPDATE_SNIPPET = "UPDATE public.books SET snippet=? WHERE username=?";
         final String UPDATE_REVIEW = "UPDATE public.books SET review=? WHERE username=?";
-        String[] booknames = {""};
-        String[] bookauthors = {""};
-        String[] snippets = {""};
-        Integer[] reviews = {0};
+        int size = books.size();
+        String[] booknames = new String[size];
+        String[] bookauthors = new String[size];
+        String[] snippets = new String[size];
+        Integer[] reviews = new Integer[size];
         String username = user.getUserName();
 
-        int i = 0;
-        for (Book b: books){
-            booknames[i] = b.getBookName();
-            bookauthors[i] = b.getBookAuthor();
-            snippets[i] = b.getBookSnippet();
-            reviews[i] = (int)b.getBookReview();
-            i++;
+
+        for (int i = 0; i < books.size(); i++){
+            booknames[i] = books.get(i).getBookName();
+            bookauthors[i] = books.get(i).getBookAuthor();
+            snippets[i] = books.get(i).getBookSnippet();
+            reviews[i] = (int)books.get(i).getBookReview();
         }
 
         try {
@@ -119,5 +116,57 @@ public class DBBook extends DBConnection{
         }
 
         return books;
+    }
+
+    public ArrayList<Book> getBooks(User user){
+        final String SELECT_BOOKS = "SELECT * FROM public.books WHERE username = ?;";
+        String username = user.getUserName();
+        ArrayList<Book> temp = new ArrayList<>();
+
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKS);
+            preparedStatement.setString(1, username);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()){
+                String[] booknames;
+                String[] bookauthors;
+                String[] snippets;
+                Integer[] reviews;
+
+                Array arrayBookName = rs.getArray(2);
+                Array arrayBookAuthors = rs.getArray(3);
+                Array arrayBookSnippets = rs.getArray(5);
+                Array arrayBookReviews = rs.getArray(6);
+
+                booknames = (String[])arrayBookName.getArray();
+                bookauthors = (String[])arrayBookAuthors.getArray();
+                snippets = (String[])arrayBookSnippets.getArray();
+                reviews = (Integer[])arrayBookReviews.getArray();
+
+                for (int i = 0; i < booknames.length; i++){
+                    Book tempBook = new Book(booknames[i], snippets[i], bookauthors[i], reviews[i]);
+                    temp.add(tempBook);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return temp;
+    }
+
+    public boolean checkUserBooks(User user){
+        final String SELECT_BOOKS = "SELECT * FROM public.books WHERE username = ?;";
+        boolean validate = false;
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_BOOKS);
+            preparedStatement.setString(1, user.getUserName());
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()){
+                validate = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return validate;
     }
 }
